@@ -1,0 +1,15 @@
+import cv2
+import numpy as np
+fg = cv2.imread("broke.jpg")
+bg = cv2.imread("rich.jpg")
+bg = cv2.resize(bg, (fg.shape[1], fg.shape[0]))
+hsv = cv2.cvtColor(fg, cv2.COLOR_BGR2HSV)
+lower = np.array((0, 0, 20))
+upper = np.array((180, 30, 255))
+mask1 = cv2.inRange(hsv, lower, upper)
+mask2 = cv2.bitwise_not(mask1)
+result1 = cv2.bitwise_and(bg, bg, mask=mask1)
+result2 = cv2.bitwise_and(fg, fg, mask=mask2)
+add = cv2.addWeighted(result1, 1, result2, 1, 0)
+cv2.imshow("screen", add)
+cv2.waitKey(0)
